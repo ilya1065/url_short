@@ -20,7 +20,7 @@ type HTTPServer struct {
 	Timeout     time.Duration `yaml:"timeout"`
 	IdleTimeout time.Duration `yaml:"idle_timeout"`
 	User        string        `yaml:"user"`
-	Password    string        `yaml:"password"`
+	Password    string        `yaml:"password" env:"HTTP_SERVER_PASSWORD" env-required:"true"`
 }
 
 func MustLoad() Config {
@@ -37,5 +37,6 @@ func MustLoad() Config {
 	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
 		log.Fatalf("не удалось считатать конфиг: %s", err)
 	}
+
 	return cfg
 }
