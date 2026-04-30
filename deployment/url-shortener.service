@@ -4,12 +4,12 @@ After=network.target
 
 [Service]
 User=root
-WorkingDirectory=/root/apps/url-shortener
-ExecStart=/root/apps/url-shortener/url-shortener
+WorkingDirectory=/root/apps/url_shortner
+ExecStart=/root/apps/url_shortner/url_shortner
 Restart=always
 RestartSec=4
 StandardOutput=inherit
-EnvironmentFile=/root/apps/url-shortener/config.env
+EnvironmentFile=/root/apps/url_shortner/config.env
 
 [Install]
 WantedBy=multi-user.target

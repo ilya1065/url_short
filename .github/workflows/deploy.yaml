@@ -14,8 +14,8 @@ jobs:
     env:
       HOST: root@45.80.228.147
       CONFIG_PATH: /root/apps/url_shortner/config/prod.yaml
-      DEPLOY_DIRECTORY: /root/apps/url-shortener
-      ENV_FILE_PATH: /root/apps/url-shortener/config.env
+      DEPLOY_DIRECTORY: /root/apps/url_shortner
+      ENV_FILE_PATH: /root/apps/url_shortner/config.env
 
     steps:
       - name: Checkout repository
@@ -39,7 +39,7 @@ jobs:
       - name: Build App
         run: |
           go mod download
-          go build -o url-shortener ./cmd/url-shortener
+          go build -o url_shortner ./cmd/url_shortner
 
       - name: Deploy to VM
         env:
@@ -54,7 +54,7 @@ jobs:
 
       - name: Remove old systemd service file
         run: |
-          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "rm -f /etc/systemd/system/url-shortener.service"
+          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "rm -f /etc/systemd/system/url_shortner.service"
 
       - name: List workspace contents
         run: |
@@ -71,9 +71,9 @@ jobs:
 
       - name: Copy systemd service file
         run: |
-          scp -i deploy_key.pem -o StrictHostKeyChecking=no ${{ github.workspace }}/deployment/url-shortener.service ${{ env.HOST }}:/tmp/url-shortener.service
-          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "mv /tmp/url-shortener.service /etc/systemd/system/url-shortener.service"
+          scp -i deploy_key.pem -o StrictHostKeyChecking=no ${{ github.workspace }}/deployment/url_shortner.service ${{ env.HOST }}:/tmp/url_shortner.service
+          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "mv /tmp/url_shortner.service /etc/systemd/system/url_shortner.service"
 
       - name: Start application
         run: |
-          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "systemctl daemon-reload && systemctl restart url-shortener.service"
+          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ env.HOST }} "systemctl daemon-reload && systemctl restart url_shortner.service"
