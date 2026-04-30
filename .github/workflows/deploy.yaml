@@ -39,7 +39,7 @@ jobs:
       - name: Build App
         run: |
           go mod download
-          go build -o url-shortener ./cmd/url-shortner
+          go build -o url-shortener ./cmd/url-shortener
 
       - name: Deploy to VM
         env:
