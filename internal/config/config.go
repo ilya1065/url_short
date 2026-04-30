@@ -24,10 +24,10 @@ type HTTPServer struct {
 }
 
 func MustLoad() Config {
-	configPath := *flag.String("config-path", "/home/lusa/GolandProjects/url_shortner/config/local.yaml", "config-path")
+	configPath := *flag.String("config-path", "", "config-path")
 	flag.Parse()
 	if configPath == "" {
-		log.Fatal("конфига нет")
+		configPath = os.Getenv("CONFIG_PATH")
 	}
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		log.Fatalf("по указанному пути конфига нету путь: %s", configPath)
