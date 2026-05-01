@@ -7,12 +7,13 @@ import (
 	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	Env         string `yaml:"env" env-default:"local"`
-	StoragePath string `yaml:"storage_path" env-required:"true"`
-	HTTPServer  `yaml:"http_server"`
+	Env        string `yaml:"env" env-default:"local"`
+	DBURL      string `env:"DATABASE_URL"`
+	HTTPServer `yaml:"http_server"`
 }
 
 type HTTPServer struct {
@@ -24,6 +25,7 @@ type HTTPServer struct {
 }
 
 func MustLoad() Config {
+	godotenv.Load()
 	configPath := *flag.String("config-path", "", "config-path")
 	flag.Parse()
 	if configPath == "" {

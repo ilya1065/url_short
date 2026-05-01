@@ -8,10 +8,11 @@ import (
 	"url_shortner/internal/http-server/handlers/redirect"
 	"url_shortner/internal/http-server/handlers/url/delet"
 	"url_shortner/internal/http-server/handlers/url/save"
+	"url_shortner/internal/http-server/handlers/url/update"
 	mvLogger "url_shortner/internal/http-server/middleware/logger"
 	"url_shortner/internal/lib/logger/handlers/slogpretty"
 	"url_shortner/internal/lib/logger/sl"
-	"url_shortner/internal/storage/sqlite"
+	"url_shortner/internal/storage/postgres"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -29,7 +30,7 @@ func main() {
 	log.Info("старт приложения", slog.String("env", cfg.Env))
 	log.Debug("уровень дебаг")
 
-	storage, err := sqlite.New(cfg.StoragePath)
+	storage, err := postgres.New(cfg.DBURL)
 	if err != nil {
 		log.Error("ошибка инициализация storage", sl.Err(err))
 		os.Exit(1)
@@ -47,6 +48,7 @@ func main() {
 		}))
 		r.Post("/", save.New(log, storage))
 		r.Delete("/{alias}", delet.New(log, storage))
+		r.Put("/", update.New(log, storage))
 	})
 
 	router.Get("/{alias}", redirect.New(log, storage))
